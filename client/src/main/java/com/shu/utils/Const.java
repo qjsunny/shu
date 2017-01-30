@@ -14,4 +14,14 @@ public class Const {
      * 成功状态
      */
     public static final String STATUS_SUCCESS = "success";
+
+    /**
+     * 失败状态
+     */
+    public static final String STATUS_FAIL = "fail";
+
+    /**
+     * 错误状态
+     */
+    public static final String STATUS_ERROR = "error";
 }

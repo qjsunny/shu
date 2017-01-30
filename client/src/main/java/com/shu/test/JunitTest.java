@@ -1,6 +1,8 @@
 package com.shu.test;
 
+import com.shu.db.model.user.TUser;
 import com.shu.services.test.TestService;
+import com.shu.services.user.TUserService;
 import com.shu.utils.UUID;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -21,15 +23,18 @@ public class JunitTest {
         String[] paths = new String[] { "spring/applicationContext-bo.xml" };
         ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
 
-        TestService ts = (TestService) ctx.getBean("testService");
+        TUserService ts = (TUserService) ctx.getBean("userService");
 
-        com.shu.db.model.test.Test test = new com.shu.db.model.test.Test();
-        test.setName("jin");
+        TUser user = new TUser();
+        user.setUsername("jinyu");
+        TUser user2 = ts.getUserById("1");
+        System.out.println(user2.getPassword());
+
 //        test.setId(UUID.getID());
 //        ts.addTest(test);
-        List<com.shu.db.model.test.Test> list1 = ts.getTestListByParam(test, null, null);
-        for(com.shu.db.model.test.Test x : list1){
-            System.out.println(x.getName());
+        List<TUser> list1 = ts.getUserListByParam(user, null, null);
+        for(TUser x : list1){
+            System.out.println(x.getPassword());
         }
     }
 }
