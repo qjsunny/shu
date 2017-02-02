@@ -29,6 +29,11 @@ public class LoginAction {
         return "login/login";
     }
 
+    @RequestMapping(value = "reghtml", produces = "text/html;charset=UTF-8")
+    public String reghtml(Model model){
+        return "login/register";
+    }
+
     @RequestMapping(value = "login", produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String login(TUser user){
@@ -47,6 +52,13 @@ public class LoginAction {
     public String register(TUser user){
         JSONObject jsonObject = new JSONObject();
 //        List<Test> list1 = testService.getTestListByParam(test, null, null);
+        TUser user2 = new TUser();
+        user2.setUsername(user.getUsername());
+        List<TUser> list1 = tUserService.getUserListByParam(user2, null, null);
+        if(list1.size() > 0){
+            jsonObject.put("status", Const.STATUS_EXIST);
+            return jsonObject.toString();
+        }
         user.setId(UUID.getID());
         user.setIszhubo(0);
         user.setLevel(0);

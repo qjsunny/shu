@@ -24,4 +24,9 @@ public class Const {
      * 错误状态
      */
     public static final String STATUS_ERROR = "error";
+
+    /**
+     * 存在状态
+     */
+    public static final String STATUS_EXIST = "exist";
 }

@@ -144,13 +144,13 @@
         from test
         where 1 = 1
         <if test="pojo != null and pojo.id != null and pojo.id != ''">
-            and name = #{pojo.id,jdbcType=VARCHAR}
+            and id = #{pojo.id,jdbcType=VARCHAR}
         </if>
         <if test="pojo != null and pojo.username != null and pojo.username != ''">
-            and name = #{pojo.username,jdbcType=VARCHAR}
+            and username = #{pojo.username,jdbcType=VARCHAR}
         </if>
         <if test="pojo != null and pojo.password != null and pojo.password != ''">
-            and name = #{pojo.password,jdbcType=VARCHAR}
+            and password = #{pojo.password,jdbcType=VARCHAR}
         </if>
         <if test="pojo != null and pojo.level != null">
             and age = #{pojo.age,jdbcType=INTEGER}
