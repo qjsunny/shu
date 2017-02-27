@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -36,14 +37,16 @@ public class LoginAction {
 
     @RequestMapping(value = "login", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String login(TUser user){
+    public String login(TUser user, HttpSession session){
         JSONObject jsonObject = new JSONObject();
         List<TUser> list1 = tUserService.getUserListByParam(user, null, null);
         if(list1.size() == 0){
             jsonObject.put("status", Const.STATUS_FAIL);
             return jsonObject.toString();
         }
+        session.setAttribute("user", list1.get(0));
         jsonObject.put("status", Const.STATUS_SUCCESS);
+        jsonObject.put("userid", list1.get(0).getId());
         return jsonObject.toString();
     }
 
