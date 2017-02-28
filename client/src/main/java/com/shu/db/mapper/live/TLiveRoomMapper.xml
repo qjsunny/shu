@@ -7,16 +7,17 @@
     <result column="islive" property="islive" jdbcType="INTEGER" />
     <result column="app" property="app" jdbcType="VARCHAR" />
     <result column="stream" property="stream" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
     <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="updateUser" property="updateuser" jdbcType="VARCHAR" />
     <result column="isDelete" property="isdelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, uid, islive, app, stream, createTime, updateTime, updateUser, isDelete
+    id, uid, islive, app, stream, img, createTime, updateTime, updateUser, isDelete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_live_room
     where id = #{id,jdbcType=VARCHAR}
@@ -26,14 +27,14 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.shu.db.model.live.TLiveRoom" >
-    insert into t_live_room (id, uid, islive, 
-      app, stream, createTime, 
-      updateTime, updateUser, isDelete
-      )
-    values (#{id,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR}, #{islive,jdbcType=INTEGER}, 
-      #{app,jdbcType=VARCHAR}, #{stream,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}
-      )
+    insert into t_live_room (id, uid, islive,
+    app, stream, img, createTime,
+    updateTime, updateUser, isDelete
+    )
+    values (#{id,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR}, #{islive,jdbcType=INTEGER},
+    #{app,jdbcType=VARCHAR}, #{stream,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP},
+    #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.shu.db.model.live.TLiveRoom" >
     insert into t_live_room
@@ -52,6 +53,9 @@
       </if>
       <if test="stream != null" >
         stream,
+      </if>
+      <if test="img != null" >
+        img,
       </if>
       <if test="createtime != null" >
         createTime,
@@ -82,6 +86,9 @@
       <if test="stream != null" >
         #{stream,jdbcType=VARCHAR},
       </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -111,6 +118,9 @@
       <if test="stream != null" >
         stream = #{stream,jdbcType=VARCHAR},
       </if>
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -132,6 +142,7 @@
       islive = #{islive,jdbcType=INTEGER},
       app = #{app,jdbcType=VARCHAR},
       stream = #{stream,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
       createTime = #{createtime,jdbcType=TIMESTAMP},
       updateTime = #{updatetime,jdbcType=TIMESTAMP},
       updateUser = #{updateuser,jdbcType=VARCHAR},

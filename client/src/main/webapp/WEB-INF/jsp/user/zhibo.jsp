@@ -9,7 +9,7 @@
 <%@include file="../commons/jsptag.jsp"%>
 <html>
 <head>
-    <title>Title</title>
+    <title>我的直播间</title>
     <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="${ctx}/theme/flowplayer/flowplayer-3.2.8.min.js"></script>
 </head>
@@ -57,6 +57,27 @@
                 }
             });
         })
+
+        $("#setCover").click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/live/setCover",
+                data: {
+                    id:${liveroom.id},
+                    islive: 0
+                },
+                dataType: "json",
+                success: function(data){
+                    temp = eval(data);
+                    if(temp.status == "success"){
+                        alert("直播间已关闭，请停止串流，不然依旧可以在直播间看见画面");
+                    }
+                },
+                error: function(data){
+                    alert("系统错误");
+                }
+            });
+        })
     })
 </script>
 <body>
@@ -66,7 +87,8 @@
     <button id="closeRoom">关闭直播间</button>
     <br>
     <strong>串流地址</strong><p id="app">${liveroom.app}</p><br>
-    <strong>串流码</strong><p id="stream">${liveroom.stream}</p>
+    <strong>串流码</strong><p id="stream">${liveroom.stream}</p><br>
+    <button id="setCover">设置直播封面</button>
 </div>
 <!-- this A tag is where your Flowplayer will be placed. it can be anywhere -->
 <a

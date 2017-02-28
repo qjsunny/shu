@@ -33,4 +33,14 @@ public class LiveAction {
 
         return resObj.toString();
     }
+
+    @RequestMapping(value = "setCover", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String setCover(TLiveRoom room){
+        JSONObject resObj = new JSONObject();
+        tLiveRoomService.modifyLRoom(room);
+        resObj.put("status", Const.STATUS_SUCCESS);
+
+        return resObj.toString();
+    }
 }

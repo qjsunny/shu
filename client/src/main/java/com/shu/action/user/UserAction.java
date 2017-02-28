@@ -1,6 +1,7 @@
 package com.shu.action.user;
 
 import com.alibaba.fastjson.JSONObject;
+import com.shu.config.SystemConfig;
 import com.shu.db.model.live.TLiveRoom;
 import com.shu.db.model.user.TUser;
 import com.shu.db.model.user.TUserInfo;
@@ -14,8 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -64,6 +67,52 @@ public class UserAction {
         tUserInfoService.modifyUserinfo(userInfo);
         resObj.put("status", Const.STATUS_SUCCESS);
         return resObj.toString();
+    }
+
+    @RequestMapping(value = "uploadlogo", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String uploadLogo(MultipartFile uploadfile, String sessionId, HttpServletRequest request) {
+        JSONObject obj = new JSONObject();
+
+        TUser user = (TUser) request.getSession().getAttribute("user");
+        try {
+            if (uploadfile != null) {
+                String fPath = this.getClass().getResource("/").getPath();
+                fPath = fPath.substring(0, fPath.indexOf("WEB-INF"));
+                String prefixPath = SystemConfig.p.getProperty("upload.logo.filepath");
+
+                String fileName = uploadfile.getOriginalFilename();
+                fileName = fileName.substring(fileName.lastIndexOf("."));
+                fileName = System.currentTimeMillis() + fileName;
+
+                String savePath = prefixPath + fileName;
+
+                File saveDirectory = new File(fPath + savePath);
+
+                if (!saveDirectory.getParentFile().exists()) {
+                    saveDirectory.getParentFile().mkdirs();
+                }
+
+                uploadfile.transferTo(saveDirectory);
+
+                // 更新数据
+                TUserInfo queryUser = new TUserInfo();
+                queryUser.setUid(user.getId());
+                TUserInfo modifyUser = tUserInfoService.getUserinfoListByParam(queryUser, null, null).get(0);
+                modifyUser.setHeadimg(fileName);
+                modifyUser.setUpdateUser(user.getId());
+                tUserInfoService.modifyUserinfo(modifyUser);
+
+                obj.put("status", Const.STATUS_SUCCESS);
+            }else{
+                System.out.println("为空");
+                obj.put("status", Const.STATUS_ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return obj.toString();
     }
 
     @RequestMapping(value = "myZhibo", produces = "text/html;charset=UTF-8")
