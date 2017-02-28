@@ -1,0 +1,7 @@
+开始 ./etc/init.d/srs start
+
+停止 ./etc/init.d/srs stop
+
+重启 ./etc/init.d/srs restart
+
+./objs/srs -c conf/rtmp.conf

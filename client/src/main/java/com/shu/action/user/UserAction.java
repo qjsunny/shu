@@ -1,8 +1,10 @@
 package com.shu.action.user;
 
 import com.alibaba.fastjson.JSONObject;
+import com.shu.db.model.live.TLiveRoom;
 import com.shu.db.model.user.TUser;
 import com.shu.db.model.user.TUserInfo;
+import com.shu.services.live.TLiveRoomService;
 import com.shu.services.user.TUserInfoService;
 import com.shu.services.user.TUserService;
 import com.shu.utils.Const;
@@ -28,6 +30,9 @@ public class UserAction {
 
     @Autowired
     TUserService tUserService;
+
+    @Autowired
+    TLiveRoomService tLiveRoomService;
 
     @RequestMapping(value = "userinfo", produces = "text/html;charset=UTF-8")
     public String userinfohtml(Model model, String userId, HttpServletRequest request){
@@ -73,6 +78,18 @@ public class UserAction {
         List<TUserInfo> userInfoList = tUserInfoService.getUserinfoListByParam(userInfo, null, null);
         model.addAttribute("userinfo", userInfoList.get(0));
 
+        //往model传入直播间object
+        TLiveRoom roomQuery = new TLiveRoom();
+        roomQuery.setUid(user.getId());
+
+        List<TLiveRoom> list1 = tLiveRoomService.getLRoomListByParam(roomQuery, null, null);
+        if(list1.size() == 0){
+            //// TODO: 2017/2/28 这种情况不应该出现，如果出现，转跳去错误处理页面，待做
+            return "user/error";
+        }
+        model.addAttribute("liveroom", list1.get(0));
+
+        //不是主播就去转跳去申请主播的页面
         if(user.getIszhubo() == 0){
             model.addAttribute("iszhubo", 0);
             return "user/tobezhubo";
@@ -92,6 +109,15 @@ public class UserAction {
 
         user.setIszhubo(1);
         tUserService.modifyUser(user);
+
+        //还需要为他创建一个直播间
+        TLiveRoom newRoom = new TLiveRoom();
+        newRoom.setId(UUID.getID());
+        newRoom.setUid(user.getId());
+        newRoom.setIslive(0);
+        newRoom.setApp("qunima");
+        newRoom.setStream(user.getId());
+
 
         resObj.put("status", Const.STATUS_SUCCESS);
         return resObj.toString();

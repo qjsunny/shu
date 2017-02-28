@@ -1,7 +1,9 @@
 package com.shu.test;
 
+import com.shu.db.model.live.TLiveRoom;
 import com.shu.db.model.user.TUser;
 import com.shu.db.model.user.TUserInfo;
+import com.shu.services.live.TLiveRoomService;
 import com.shu.services.test.TestService;
 import com.shu.services.user.TUserInfoService;
 import com.shu.services.user.TUserService;
@@ -19,6 +21,7 @@ public class JunitTest {
 
     /**
      * This is just a test
+     * 新创建的表请在下面进行测试
      */
     @Test
     public void testTest() {
@@ -43,5 +46,28 @@ public class JunitTest {
 //        for(TUser x : list1){
 //            System.out.println(x.getPassword());
 //        }
+    }
+
+    /**
+     * 测试TLiveRoom的Service
+     * 2017年2月28日 11:26:57测试通过
+     */
+    @Test
+    public void TestTLiveRoom(){
+        String[] paths = new String[] { "spring/applicationContext-bo.xml" };
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
+
+        TLiveRoomService ts = (TLiveRoomService) ctx.getBean("lRoomService");
+        TLiveRoom room = ts.getLRoomById("2");
+
+        System.out.println(room.getApp());
+
+        TLiveRoom queryRoom = new TLiveRoom();
+        queryRoom.setIslive(1);
+
+        List<TLiveRoom> list1 = ts.getLRoomListByParam(queryRoom, null, null);
+        for(TLiveRoom x : list1){
+            System.out.println(x.getApp());
+        }
     }
 }
