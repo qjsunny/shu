@@ -40,20 +40,12 @@
     </bean>
 
     <!-- 拦截器 -->
-    <!--<mvc:interceptors>-->
-    <!--<mvc:interceptor>-->
-    <!--<mvc:mapping path="/user/**" />-->
-    <!--<mvc:mapping path="/flow/**" />-->
-    <!--<mvc:mapping path="/manorder/**" />-->
-    <!--<mvc:mapping path="/client/**" />-->
-    <!--<mvc:mapping path="/payment/**" />-->
-    <!--<mvc:mapping path="/client/**" />-->
-    <!--<mvc:mapping path="/statis/**" />-->
-    <!--<mvc:mapping path="/sys/**" />-->
-    <!--<mvc:mapping path="/init" />-->
-    <!--<bean class="com.oudot.app.web.interceptor.AuthorityInterceptor" />-->
-    <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors> -->
+    <mvc:interceptors>
+    <mvc:interceptor>
+    <mvc:mapping path="/user/**" />
+    <bean class="com.shu.web.interceptor.AuthorityInterceptor" />
+    </mvc:interceptor>
+    </mvc:interceptors>
 
     <!-- 对静态资源文件的访问  方案一 （二选一） -->
     <mvc:default-servlet-handler/>
