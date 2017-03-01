@@ -10,6 +10,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>client</module>
+        <module>cms</module>
+        <module>generator</module>
     </modules>
 
     <properties>
