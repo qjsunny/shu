@@ -50,8 +50,7 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-
-        <table tableName="test" domainObjectName="Test"
+        <table tableName="t_enterprise" domainObjectName="Enterprise"
                enableInsert="true" enableSelectByPrimaryKey="true"
                enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true"
                enableCountByExample="false" enableUpdateByExample="false"

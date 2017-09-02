@@ -49,7 +49,7 @@ public class TestAction {
     @ResponseBody
     public String getAge(Test test){
         JSONObject jsonObject = new JSONObject();
-//        List<Test> list1 = testService.getTestListByParam(test, null, null);
+//        List<TestPublic> list1 = testService.getTestListByParam(test, null, null);
         if(StringUtils.isEmpty(test.getId())){
             jsonObject.put("status", "false");
             jsonObject.put("age", 0);

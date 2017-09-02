@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shu.db.dao.enterprise.EnterpriseMapper" >
+  <resultMap id="BaseResultMap" type="com.shu.db.model.enterprise.Enterprise" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phoneNumber" property="phonenumber" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="certificate" property="certificate" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="INTEGER" />
+    <result column="advertisement" property="advertisement" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="updateUser" property="updateuser" jdbcType="VARCHAR" />
+    <result column="isDelete" property="isdelete" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, username, password, email, phoneNumber, address, certificate, money, advertisement, 
+    createTime, updateTime, updateUser, isDelete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_enterprise
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_enterprise
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shu.db.model.enterprise.Enterprise" >
+    insert into t_enterprise (id, username, password, 
+      email, phoneNumber, address, 
+      certificate, money, advertisement, 
+      createTime, updateTime, updateUser, 
+      isDelete)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{certificate,jdbcType=VARCHAR}, #{money,jdbcType=INTEGER}, #{advertisement,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, 
+      #{isdelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shu.db.model.enterprise.Enterprise" >
+    insert into t_enterprise
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="phonenumber != null" >
+        phoneNumber,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="certificate != null" >
+        certificate,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="advertisement != null" >
+        advertisement,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="updateuser != null" >
+        updateUser,
+      </if>
+      <if test="isdelete != null" >
+        isDelete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenumber != null" >
+        #{phonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null" >
+        #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=INTEGER},
+      </if>
+      <if test="advertisement != null" >
+        #{advertisement,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null" >
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shu.db.model.enterprise.Enterprise" >
+    update t_enterprise
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenumber != null" >
+        phoneNumber = #{phonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null" >
+        certificate = #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=INTEGER},
+      </if>
+      <if test="advertisement != null" >
+        advertisement = #{advertisement,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null" >
+        updateUser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shu.db.model.enterprise.Enterprise" >
+    update t_enterprise
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phoneNumber = #{phonenumber,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      certificate = #{certificate,jdbcType=VARCHAR},
+      money = #{money,jdbcType=INTEGER},
+      advertisement = #{advertisement,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      updateUser = #{updateuser,jdbcType=VARCHAR},
+      isDelete = #{isdelete,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectListByParam" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_enterprise
+    where 1 = 1
+    <if test="pojo != null and pojo.id != null and pojo.id != ''">
+      and id = #{pojo.id,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.username != null and pojo.username != ''">
+      and username = #{pojo.username,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.password != null and pojo.password != ''">
+      and password = #{pojo.password,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.email != null and pojo.email != ''">
+      and email = #{pojo.email,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.phonenumber != null and pojo.phonenumber != ''">
+      and phonenumber = #{pojo.phonenumber,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.address != null and pojo.address != ''">
+      and address = #{pojo.address,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.certificate != null and pojo.certificate != ''">
+      and certificate = #{pojo.certificate,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.money != null">
+      and money = #{pojo.money,jdbcType=INTEGER}
+    </if>
+    <if test="pojo != null and pojo.advertisement != null and pojo.advertisement != ''">
+      and advertisement = #{pojo.advertisement,jdbcType=VARCHAR}
+    </if>
+    <!--<if test="pojo != null and pojo.updateuser != null and pojo.updateuser != ''">-->
+    <!--and updateuser = #{pojo.updateUser,jdbcType=VARCHAR}-->
+    <!--</if>-->
+    <if test="pojo != null and pojo.isdelete != null">
+      and isdelete = #{pojo.isdelete,jdbcType=INTEGER}
+    </if>
+    <if test="orderObj != null">
+      order by
+      <foreach collection="orderObj.orders" item="obj" separator=",">
+        ${obj.orderName}  ${obj.orderSort}
+      </foreach>
+    </if>
+    <if test="pager != null">
+      limit ${pager.start}, ${pager.pageSize}
+    </if>
+  </select>
+
+  <select id="selectCountByParam" resultType="int">
+    select count(1)
+    from t_manager
+    where 1 = 1
+    <if test="pojo != null and pojo.id != null and pojo.id != ''">
+      and id = #{pojo.id,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.username != null and pojo.username != ''">
+      and username = #{pojo.username,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.password != null and pojo.password != ''">
+      and password = #{pojo.password,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.email != null and pojo.email != ''">
+      and email = #{pojo.email,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.phonenumber != null and pojo.phonenumber != ''">
+      and phonenumber = #{pojo.phonenumber,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.address != null and pojo.address != ''">
+      and address = #{pojo.address,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.certificate != null and pojo.certificate != ''">
+      and certificate = #{pojo.certificate,jdbcType=VARCHAR}
+    </if>
+    <if test="pojo != null and pojo.money != null">
+      and money = #{pojo.money,jdbcType=INTEGER}
+    </if>
+    <if test="pojo != null and pojo.advertisement != null and pojo.advertisement != ''">
+      and advertisement = #{pojo.advertisement,jdbcType=VARCHAR}
+    </if>
+    <!--<if test="pojo != null and pojo.updateuser != null and pojo.updateuser != ''">-->
+    <!--and updateuser = #{pojo.updateUser,jdbcType=VARCHAR}-->
+    <!--</if>-->
+    <if test="pojo != null and pojo.isdelete != null">
+      and isdelete = #{pojo.isdelete,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

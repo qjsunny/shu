@@ -5,8 +5,8 @@ import com.shu.db.model.Order;
 import com.shu.db.model.OrderSort;
 import com.shu.db.model.admin.TAdmin;
 import com.shu.services.admin.TAdminService;
-import com.shu.services.user.TUserService;
 import com.shu.utils.Const;
+import com.shu.utils.MD5Util;
 import com.shu.utils.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +38,9 @@ public class IndexAction {
     }
 
     @RequestMapping(value = "/addHtml", produces = "text/html;charset=UTF-8")
-    public String addHtml() {
+    public String addHtml(HttpSession session) {
+        if (!verifyaddAdmin(session))
+            return "forward:/index/";
         return "index/add";
     }
 
@@ -61,11 +63,25 @@ public class IndexAction {
         List<TAdmin> list1 = tAdminService.getAdminListByParam(tAdmin, null, null);
         if (list1.isEmpty()) {
             admin.setId(UUID.getID());
+            admin.setPassword(MD5Util.MD5(MD5Util.MD5(admin.getPassword())));
             tAdminService.addAdmin(admin);
             jsonObject.put("status", Const.STATUS_SUCCESS);
             return jsonObject.toString();
         }
         jsonObject.put("status", Const.STATUS_FAIL);
         return jsonObject.toString();
+    }
+
+    public boolean verifyaddAdmin(HttpSession session) {
+        TAdmin tAdmin = new TAdmin();
+        String name = (String) session.getAttribute("name");
+        tAdmin.setName(name);
+        List<TAdmin> list2 = tAdminService.getAdminListByParam(tAdmin, null, null);
+        for (TAdmin x : list2) {
+            if (x.getAddAdmin() != 1) {
+                return false;
+            }
+        }
+        return true;
     }
 }

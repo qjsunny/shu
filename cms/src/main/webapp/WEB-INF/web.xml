@@ -50,6 +50,19 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
 
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.js</url-pattern>
+    <url-pattern>*.css</url-pattern>
+    <url-pattern>*.jpeg</url-pattern>
+    <url-pattern>/login/captcha-image</url-pattern>
+    <url-pattern>/images/*</url-pattern>
+    <url-pattern>/assets/*</url-pattern>
+    <url-pattern>/cropper/*</url-pattern>
+    <url-pattern>/upload/*</url-pattern>
+    <url-pattern>/asset/*</url-pattern>
+  </servlet-mapping>
+
   <!--
   <error-page>
      <error-code>404</error-code>

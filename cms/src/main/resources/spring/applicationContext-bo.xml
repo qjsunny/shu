@@ -12,7 +12,7 @@
        http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context-3.1.xsd"
 >
 
-    <context:property-placeholder location="classpath:config/jdbc.properties" />
+    <context:property-placeholder location="classpath:config/localjdbc.properties" />
 
     <!-- 声明对 @Autowired注解进行解析 -->
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
@@ -71,4 +71,25 @@
     <!-- 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"> -->
     <!-- 	  <constructor-arg index="0" ref="sqlSessionFactory" /> -->
     <!-- 	</bean> -->
+
+    <!-- google Kaptcha 验证码 -->
+    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg type="java.util.Properties">
+                    <props>
+                        <prop key="kaptcha.border">yes</prop>
+                        <prop key="kaptcha.border.color">105,179,90</prop>
+                        <prop key="kaptcha.textproducer.font.color">red</prop>
+                        <prop key="kaptcha.image.width">270</prop>
+                        <prop key="kaptcha.textproducer.font.size">80</prop>
+                        <prop key="kaptcha.image.height">90</prop>
+                        <prop key="kaptcha.session.key">code</prop>
+                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
 </beans>

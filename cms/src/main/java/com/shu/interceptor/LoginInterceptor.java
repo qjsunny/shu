@@ -48,9 +48,12 @@ public class LoginInterceptor implements HandlerInterceptor{
         if (unauthenticatedUrls.contains(url)) return true;
 
         HttpSession session = httpServletRequest.getSession();
-        String username = (String) session.getAttribute("name");
 
-        if (username != null) {
+        if (session.getAttribute("manager") != null) {
+            return true;
+        }
+
+        if (session.getAttribute("enterprise") != null) {
             return true;
         }
 

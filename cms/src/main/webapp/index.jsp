@@ -18,7 +18,7 @@
 <body>
 <%
     // 重定向到新地址
-    String site = "http://localhost:8080/login/login.html";
+    String site = "http://localhost:8080/login/";
     response.setStatus(response.SC_MOVED_TEMPORARILY);
     response.setHeader("Location", site);
 %>

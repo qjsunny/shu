@@ -1,85 +1,160 @@
 package com.shu.action.login;
 
 import com.alibaba.fastjson.JSONObject;
-import com.shu.db.model.admin.TAdmin;
-import com.shu.services.admin.TAdminService;
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
+import com.shu.db.model.enterprise.Enterprise;
+import com.shu.db.model.manager.Manager;
+import com.shu.services.enterprise.EnterpriseService;
+import com.shu.services.manager.ManagerService;
 import com.shu.utils.Const;
+import com.shu.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by james on 2017/2/9.
  */
 @Controller
-@RequestMapping(value = "login")
+@RequestMapping(value = "/login")
 public class LoginAction {
 
     @Autowired
-    TAdminService tAdminService;
+    ManagerService managerService;
 
-    @RequestMapping(value = "login.html", produces = "text/html;charset=UTF-8")
+    @Autowired
+    EnterpriseService enterpriseService;
+
+    @Autowired
+    private Producer captchaProducer;
+
+    /**
+     * 登录页面跳转
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/", produces = "text/html;charset=UTF-8")
     public String loginHtml(Model model) {
         return "login/login";
     }
 
-//    @RequestMapping(value = "login1.html", produces = "text/html;charset=UTF-8")
-//    public String login1Html(Model model) {
-//        return "login/login1";
-//    }
-
-    @RequestMapping(value = "login", produces = "text/html;charset=UTF-8")
+    /**
+     * 管理员登录
+     * @param manager
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/Manager", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String login(TAdmin admin, HttpSession session) {
+    public String managerLogin(Manager manager, HttpSession session) {
         JSONObject jsonObject = new JSONObject();
-        List<TAdmin> list1 = tAdminService.getAdminListByParam(admin, null, null);
-        if (list1.size() == 0) {
+        manager.setPassword(MD5Util.MD5(MD5Util.MD5(manager.getPassword())));
+        List<Manager> managerList = managerService.getManagerListByParam(manager, null, null);
+        if (managerList.size() == 0) {
             jsonObject.put("status", Const.STATUS_FAIL);
             return jsonObject.toString();
         }
-        String name = admin.getName();
-        session.setAttribute("name", name);
+        session.setAttribute("manager", managerList.get(0));
         jsonObject.put("status", Const.STATUS_SUCCESS);
         return jsonObject.toString();
     }
 
-//    @RequestMapping(value = "login1", produces = "text/html;charset=UTF-8")
-//    public String login1(HttpSession session, String name, String password,
-//                         HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        TAdmin admin = new TAdmin();
-//        admin.setName(name);
-//        admin.setPassword(password);
-//        List<TAdmin> list1 = tAdminService.getAdminListByParam(admin, null, null);
-//        if (list1.size() == 0) {
-//            String message = "用户名或密码错误！";
-//            request.setAttribute("testMessage", message);
-//            System.out.println("用户名或密码错误！！");
-//            return "login/login1";
-//        }
-//        System.out.println(admin.getId());
-//        session.setAttribute("name", name);
-//        System.out.println("登陆成功！！");
-//        return "redirect:/index/";
-//    }
-
-    @RequestMapping(value = "logout", produces = "text/html;charset=UTF-8")
-    public String logout(Model model, HttpSession session) {
-        Object object = session.getAttribute("name");
-        if (object != null) {
-            session.removeAttribute("name");
+    /**
+     * 企业登录
+     * @param enterprise
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/Enterprise", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String enterpriseLogin(Enterprise enterprise, HttpSession session) {
+        JSONObject jsonObject = new JSONObject();
+        enterprise.setPassword(MD5Util.MD5(MD5Util.MD5(enterprise.getPassword())));
+        List<Enterprise> enterpriseList = enterpriseService.getEnterpriseListByParam(enterprise, null, null);
+        if (enterpriseList.size() == 0) {
+            jsonObject.put("status", Const.STATUS_FAIL);
+            return jsonObject.toString();
         }
-        return "login/login";
+        session.setAttribute("enterprise", enterpriseList.get(0));
+        jsonObject.put("status", Const.STATUS_SUCCESS);
+        return jsonObject.toString();
+    }
+
+    /**
+     * 用户登出
+     * @param model
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/logout", produces = "text/html;charset=UTF-8")
+    public String logout(Model model, HttpSession session) {
+        if (session.getAttribute("manager") != null) {
+            session.removeAttribute("manager");
+        }
+        if (session.getAttribute("enterprise") != null) {
+            session.removeAttribute("enterprise");
+        }
+        return "redirect:/login/login";
+    }
+
+    /**
+     * 获取图形验证码
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/getCaptcha", produces = "text/html;charset=UTF-8")
+    public void getCaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setDateHeader("Expires", 0);
+        // Set standard HTTP/1.1 no-cache headers.
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+        // Set IE extended HTTP/1.1 no-cache headers (use addHeader).
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        // Set standard HTTP/1.0 no-cache header.
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0L);
+        // return a jpeg
+        response.setContentType("image/jpeg");
+        String capText = captchaProducer.createText();
+        request.getSession().setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
+        BufferedImage bi = captchaProducer.createImage(capText);
+        ServletOutputStream out = response.getOutputStream();
+        ImageIO.write(bi, "jpeg", out);
+        out.flush();
+        out.close();
+    }
+
+    /**
+     * 验证图形验证码
+     * @param verifyCode
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/verifyCaptcha", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String verifyCaptcha(@RequestParam("verifyCode")String verifyCode, HttpServletRequest request) {
+        JSONObject jsonObject = new JSONObject();
+        String kaptchaExpected = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        String kaptchaReceived = verifyCode;
+        if (kaptchaReceived == null || !kaptchaReceived.equalsIgnoreCase(kaptchaExpected)) {
+            jsonObject.put("status", Const.STATUS_FAIL);
+            return jsonObject.toString();
+        }
+        jsonObject.put("status", Const.STATUS_SUCCESS);
+        return jsonObject.toString();
     }
 }
